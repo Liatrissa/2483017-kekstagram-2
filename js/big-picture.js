@@ -1,4 +1,5 @@
 import { initComments, ClearComments } from './comments.js';
+import { isEscapeKey } from './util.js';
 
 const body = document.body;
 
@@ -7,8 +8,6 @@ const bigPictureImage = bigPicture.querySelector('.big-picture__img img');
 const likesCount = bigPicture.querySelector('.likes-count');
 const description = bigPicture.querySelector('.social__caption');
 const cancelButton = bigPicture.querySelector('.big-picture__cancel');
-
-const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const onEscapeKeydown = (evt) => {
   if (isEscapeKey(evt)) {
