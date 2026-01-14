@@ -1,5 +1,7 @@
 import { isEscapeKey } from './util.js';
 import { pristine } from './validate-form.js';
+import { initScale} from './scale-picture.js';
+import { initEffects, resetEffects } from './image-effects.js';
 
 const uploadForm = document.querySelector('#upload-select-image');
 const uploadInput = document.querySelector('.img-upload__input');
@@ -25,6 +27,9 @@ const initForm = () => {
     form.classList.remove('hidden');
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onEscapeKeydown);
+
+    initScale();
+    initEffects();
   });
 };
 
@@ -36,6 +41,7 @@ function closeForm () {
 
   uploadForm.reset();
   pristine.reset();
+  resetEffects();
 }
 
 cancelButton.addEventListener('click', closeForm);
