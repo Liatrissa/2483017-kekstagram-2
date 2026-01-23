@@ -42,4 +42,4 @@ const initScale = () => {
 
   resetScale();
 };
-export { initScale};
+export { initScale, resetScale };

@@ -58,12 +58,4 @@ pristine.addValidator(
   `Максимум ${MAX_COMMENT_LENGTH} символов`
 );
 
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  const isValid = pristine.validate();
-  if (isValid) {
-    form.submit();
-  }
-});
-
 export { pristine };
