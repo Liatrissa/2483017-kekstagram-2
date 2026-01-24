@@ -4,6 +4,9 @@ const templatePicture = document.querySelector('#picture').content.querySelector
 const containerPictures = document.querySelector('.pictures');
 
 const renderPictures = (photos) => {
+  const oldPictures = containerPictures.querySelectorAll('.picture');
+  oldPictures.forEach((picture) => picture.remove());
+
   const fragment = document.createDocumentFragment();
 
   photos.forEach((photo) => {
