@@ -1,18 +1,18 @@
 const ErrorMessage = {
-  INVALID : 'Введён невалидный хэштег',
-  COUNT : 'Превышено количество хэштегов',
-  REPEAT : 'Хэштеги повторяются',
+  INVALID: 'Введён невалидный хэштег',
+  COUNT: 'Превышено количество хэштегов',
+  REPEAT: 'Хэштеги повторяются',
 };
 
 const MAX_HASHTAGS = 5;
 const MAX_COMMENT_LENGTH = 140;
 const HASHTAG_REGEX = /^#[a-za-яё0-9]{1,19}$/i;
 
-const form = document.querySelector('.img-upload__form');
-const hashtagsInput = form.querySelector('.text__hashtags');
-const descriptionInput = document.querySelector('.text__description');
+const uploadFormElement = document.querySelector('.img-upload__form');
+const hashtagsInputElement = uploadFormElement.querySelector('.text__hashtags');
+const descriptionInputElement = document.querySelector('.text__description');
 
-const pristine = new Pristine(form, {
+const pristine = new Pristine(uploadFormElement, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'img-upload__field-wrapper--error'
@@ -50,10 +50,10 @@ const getErrorText = (value) => {
   return 'Ошибка';
 };
 
-pristine.addValidator(hashtagsInput, validateHashtags, getErrorText);
+pristine.addValidator(hashtagsInputElement, validateHashtags, getErrorText);
 
 pristine.addValidator(
-  descriptionInput,
+  descriptionInputElement,
   (value) => value.length <= MAX_COMMENT_LENGTH,
   `Максимум ${MAX_COMMENT_LENGTH} символов`
 );

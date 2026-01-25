@@ -10,31 +10,31 @@ const FilterId = {
   DISCUSSED: 'filter-discussed',
 };
 
-const filtersSection = document.querySelector('.img-filters');
-const filtersForm = document.querySelector('.img-filters__form');
-const filterButtons = filtersForm.querySelectorAll('.img-filters__button');
+const filtersSectionElement = document.querySelector('.img-filters');
+const filtersFormElement = document.querySelector('.img-filters__form');
+const filterButtonElements = filtersFormElement.querySelectorAll('.img-filters__button');
 
 let originalPhotos = [];
 
 const showFilters = () => {
-  filtersSection.classList.remove('img-filters--inactive');
+  filtersSectionElement.classList.remove('img-filters--inactive');
 };
 
 const setActiveButton = (activeId) => {
-  filterButtons.forEach((btn) => {
-    btn.classList.toggle('img-filters__button--active', btn.id === activeId);
+  filterButtonElements.forEach((button) => {
+    button.classList.toggle('img-filters__button--active', button.id === activeId);
   });
 };
 
 const getRandomPhotos = (photos) => {
-  const copy = photos.slice();
+  const shuffledPhotos = photos.slice();
 
-  for (let i = copy.length - 1; i > 0; i--) {
+  for (let i = shuffledPhotos.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
+    [shuffledPhotos[i], shuffledPhotos[j]] = [shuffledPhotos[j], shuffledPhotos[i]];
   }
 
-  return copy.slice(0, RANDOM_PHOTOS_COUNT);
+  return shuffledPhotos.slice(0, RANDOM_PHOTOS_COUNT);
 };
 
 const getDiscussedPhotos = (photos) =>
@@ -54,7 +54,7 @@ const applyFilter = (filterId) => {
 
 const applyFilterDebounced = debounce(applyFilter, RERENDER_DELAY);
 
-const onFiltersClick = (evt) => {
+const onFiltersFormClick = (evt) => {
   const button = evt.target.closest('.img-filters__button');
   if (!button) {
     return;
@@ -74,7 +74,7 @@ const onFiltersClick = (evt) => {
 const initFilters = (photos) => {
   originalPhotos = photos.slice();
   showFilters();
-  filtersForm.addEventListener('click', onFiltersClick);
+  filtersFormElement.addEventListener('click', onFiltersFormClick);
 };
 
 export { initFilters };

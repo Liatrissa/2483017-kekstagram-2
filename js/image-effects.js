@@ -1,10 +1,17 @@
+const DEFAULT_EFFECT = 'none';
+const DEFAULT_SLIDER_MIN = 0;
+const DEFAULT_SLIDER_MAX = 100;
+const DEFAULT_SLIDER_START = 100;
+const DEFAULT_SLIDER_STEP = 1;
+const DEFAULT_EFFECT_VALUE = 0;
+
 const EFFECTS = {
   none: {
-    filter: 'none',
+    filter: DEFAULT_EFFECT,
     unit: '',
-    min: 0,
-    max: 100,
-    step: 1,
+    min: DEFAULT_SLIDER_MIN,
+    max: DEFAULT_SLIDER_MAX,
+    step: DEFAULT_SLIDER_STEP,
   },
   chrome: {
     filter: 'grayscale',
@@ -43,30 +50,30 @@ const EFFECTS = {
   },
 };
 
-let imagePreview = null;
-let effectLevelSlider = null;
-let effectLevelValue = null;
-let effectLevelContainer = null;
-let effectsRadioButtons = null;
-let currentEffect = 'none';
-let effectsPreviews = null;
+let imagePreviewElement = null;
+let effectLevelSliderElement = null;
+let effectLevelValueElement = null;
+let effectLevelContainerElement = null;
+let effectsRadioButtonElements = null;
+let currentEffect = DEFAULT_EFFECT;
+let effectsPreviewElements = null;
 let isSliderUpdateBound = false;
 let isEffectsBound = false;
 
-const isSliderReady = () => effectLevelSlider && effectLevelSlider.noUiSlider !== undefined;
+const isSliderReady = () => effectLevelSliderElement && effectLevelSliderElement.noUiSlider !== undefined;
 
 const createSlider = () => {
-  if (!effectLevelSlider) {
+  if (!effectLevelSliderElement) {
     return;
   }
 
-  noUiSlider.create(effectLevelSlider, {
+  noUiSlider.create(effectLevelSliderElement, {
     range: {
-      min: 0,
-      max: 100,
+      min: DEFAULT_SLIDER_MIN,
+      max: DEFAULT_SLIDER_MAX,
     },
-    start: 100,
-    step: 1,
+    start: DEFAULT_SLIDER_START,
+    step: DEFAULT_SLIDER_STEP,
     connect: 'lower',
     format: {
       to: (value) => Number(value),
@@ -79,7 +86,7 @@ const updateSlider = (effect) => {
   const config = EFFECTS[effect];
 
   if (isSliderReady()) {
-    effectLevelSlider.noUiSlider.updateOptions({
+    effectLevelSliderElement.noUiSlider.updateOptions({
       range: {
         min: config.min,
         max: config.max,
@@ -91,36 +98,36 @@ const updateSlider = (effect) => {
 };
 
 const applyEffect = (effect, value) => {
-  if (!imagePreview || !effectLevelValue) {
+  if (!imagePreviewElement || !effectLevelValueElement) {
     return;
   }
 
   const config = EFFECTS[effect];
 
-  if (effect === 'none') {
-    imagePreview.style.filter = 'none';
-    effectLevelValue.value = '';
+  if (effect === DEFAULT_EFFECT) {
+    imagePreviewElement.style.filter = config.filter;
+    effectLevelValueElement.value = '';
     return;
   }
 
-  imagePreview.style.filter = `${config.filter}(${value}${config.unit})`;
-  effectLevelValue.value = value;
+  imagePreviewElement.style.filter = `${config.filter}(${value}${config.unit})`;
+  effectLevelValueElement.value = value;
 };
 
 const toggleSliderVisibility = (show) => {
-  if (!effectLevelContainer) {
+  if (!effectLevelContainerElement) {
     return;
   }
 
   if (show) {
-    effectLevelContainer.classList.remove('hidden');
+    effectLevelContainerElement.classList.remove('hidden');
   } else {
-    effectLevelContainer.classList.add('hidden');
+    effectLevelContainerElement.classList.add('hidden');
   }
 };
 
 const updateEffectPreviews = (url) => {
-  effectsPreviews.forEach((preview) => {
+  effectsPreviewElements.forEach((preview) => {
     preview.style.backgroundImage = `url(${url})`;
   });
 };
@@ -128,9 +135,9 @@ const updateEffectPreviews = (url) => {
 const onEffectChange = (evt) => {
   currentEffect = evt.target.value;
 
-  if (currentEffect === 'none') {
+  if (currentEffect === DEFAULT_EFFECT) {
     toggleSliderVisibility(false);
-    applyEffect('none', 0);
+    applyEffect(DEFAULT_EFFECT, DEFAULT_EFFECT_VALUE);
     return;
   }
 
@@ -143,44 +150,44 @@ const onEffectChange = (evt) => {
 
 const onSliderUpdate = () => {
   if (isSliderReady()) {
-    const value = effectLevelSlider.noUiSlider.get();
+    const value = effectLevelSliderElement.noUiSlider.get();
     applyEffect(currentEffect, value);
   }
 };
 
 const resetEffects = () => {
-  currentEffect = 'none';
-  const noneRadio = document.querySelector('#effect-none');
-  if (noneRadio) {
-    noneRadio.checked = true;
+  currentEffect = DEFAULT_EFFECT;
+  const noneEffectRadioElement = document.querySelector('#effect-none');
+  if (noneEffectRadioElement) {
+    noneEffectRadioElement.checked = true;
   }
-  applyEffect('none', 0);
+  applyEffect(DEFAULT_EFFECT, DEFAULT_EFFECT_VALUE);
   toggleSliderVisibility(false);
 
   if (isSliderReady()) {
-    effectLevelSlider.noUiSlider.set(100);
+    effectLevelSliderElement.noUiSlider.set(DEFAULT_SLIDER_START);
   }
 };
 
 const initEffects = () => {
-  imagePreview = document.querySelector('.img-upload__preview img');
-  effectLevelSlider = document.querySelector('.effect-level__slider');
-  effectLevelValue = document.querySelector('.effect-level__value');
-  effectLevelContainer = document.querySelector('.img-upload__effect-level');
-  effectsRadioButtons = document.querySelectorAll('.effects__radio');
-  effectsPreviews = document.querySelectorAll('.effects__preview');
+  imagePreviewElement = document.querySelector('.img-upload__preview img');
+  effectLevelSliderElement = document.querySelector('.effect-level__slider');
+  effectLevelValueElement = document.querySelector('.effect-level__value');
+  effectLevelContainerElement = document.querySelector('.img-upload__effect-level');
+  effectsRadioButtonElements = document.querySelectorAll('.effects__radio');
+  effectsPreviewElements = document.querySelectorAll('.effects__preview');
 
   if (!isSliderReady()) {
     createSlider();
   }
 
   if (isSliderReady() && !isSliderUpdateBound) {
-    effectLevelSlider.noUiSlider.on('update', onSliderUpdate);
+    effectLevelSliderElement.noUiSlider.on('update', onSliderUpdate);
     isSliderUpdateBound = true;
   }
 
   if (!isEffectsBound) {
-    effectsRadioButtons.forEach((radio) => {
+    effectsRadioButtonElements.forEach((radio) => {
       radio.addEventListener('change', onEffectChange);
     });
     isEffectsBound = true;

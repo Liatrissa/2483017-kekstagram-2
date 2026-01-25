@@ -3,13 +3,13 @@ import { isEscapeKey } from './util.js';
 const DATA_ERROR_SHOW_TIME = 5000;
 
 const showDataErrorMessage = () => {
-  const template = document.querySelector('#data-error');
+  const templateElement = document.querySelector('#data-error');
 
-  if (!template) {
+  if (!templateElement) {
     return;
   }
 
-  const dataErrorElement = template.content.querySelector('.data-error').cloneNode(true);
+  const dataErrorElement = templateElement.content.querySelector('.data-error').cloneNode(true);
 
   document.body.append(dataErrorElement);
 
@@ -19,14 +19,14 @@ const showDataErrorMessage = () => {
 };
 
 const showMessage = (templateId, innerSelector, buttonSelector) => {
-  const template = document.querySelector(templateId);
-  if (!template) {
+  const templateElement = document.querySelector(templateId);
+  if (!templateElement) {
     return;
   }
 
-  const messageElement = template.content.firstElementChild.cloneNode(true);
-  const inner = messageElement.querySelector(innerSelector);
-  const button = messageElement.querySelector(buttonSelector);
+  const messageElement = templateElement.content.firstElementChild.cloneNode(true);
+  const innerElement = messageElement.querySelector(innerSelector);
+  const buttonElement = messageElement.querySelector(buttonSelector);
 
   document.body.append(messageElement);
 
@@ -40,18 +40,18 @@ const showMessage = (templateId, innerSelector, buttonSelector) => {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
       evt.stopImmediatePropagation();
-      close(messageElement);
+      close();
     }
   }
 
   function onOutsideClick(evt) {
-    if (inner.contains(evt.target)) {
+    if (innerElement.contains(evt.target)) {
       return;
     }
-    close(messageElement);
+    close();
   }
 
-  button.addEventListener('click', close);
+  buttonElement.addEventListener('click', close);
 
   document.addEventListener('keydown', onKeydown, true);
   document.addEventListener('click', onOutsideClick, true);
@@ -65,4 +65,4 @@ const showErrorMessage = () => {
   showMessage('#error', '.error__inner', '.error__button');
 };
 
-export { showDataErrorMessage, showSuccessMessage, showErrorMessage};
+export { showDataErrorMessage, showSuccessMessage, showErrorMessage };

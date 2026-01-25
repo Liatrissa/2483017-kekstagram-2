@@ -1,6 +1,6 @@
 import { isEscapeKey } from './util.js';
 import { pristine } from './validate-form.js';
-import { initScale, resetScale} from './scale-picture.js';
+import { initScale, resetScale } from './scale-picture.js';
 import { initEffects, resetEffects, updateEffectPreviews } from './image-effects.js';
 import { sendData } from './api.js';
 import { showSuccessMessage, showErrorMessage } from './messages.js';
@@ -13,14 +13,14 @@ const SubmitButtonText = {
   SENDING: 'Отправляю...',
 };
 
-const uploadForm = document.querySelector('#upload-select-image');
-const uploadInput = document.querySelector('#upload-file');
-const form = document.querySelector('.img-upload__overlay');
-const cancelButton = document.querySelector('#upload-cancel');
-const hashtagsInput = document.querySelector('.text__hashtags');
-const descriptionInput = document.querySelector('.text__description');
-const submitButton = uploadForm.querySelector('#upload-submit');
-const previewImage = document.querySelector('.img-upload__preview img');
+const uploadFormElement = document.querySelector('#upload-select-image');
+const uploadFileInputElement = document.querySelector('#upload-file');
+const uploadOverlayElement = document.querySelector('.img-upload__overlay');
+const uploadCancelButtonElement = document.querySelector('#upload-cancel');
+const hashtagsInputElement = document.querySelector('.text__hashtags');
+const descriptionInputElement = document.querySelector('.text__description');
+const submitButtonElement = uploadFormElement.querySelector('#upload-submit');
+const uploadPreviewImageElement = document.querySelector('.img-upload__preview img');
 
 let currentObjectUrl = null;
 
@@ -33,12 +33,12 @@ const onEscapeKeydown = (evt) => {
     return;
   }
 
-  const isMessageOpen = document.querySelector('.success') || document.querySelector('.error');
-  if (isMessageOpen) {
+  const messageElement = document.querySelector('.success') || document.querySelector('.error');
+  if (messageElement) {
     return;
   }
 
-  const isInputFocused = document.activeElement === hashtagsInput || document.activeElement === descriptionInput;
+  const isInputFocused = document.activeElement === hashtagsInputElement || document.activeElement === descriptionInputElement;
 
   if (isInputFocused) {
     return;
@@ -48,17 +48,17 @@ const onEscapeKeydown = (evt) => {
 };
 
 const blockSubmitButton = () => {
-  submitButton.disabled = true;
-  submitButton.textContent = SubmitButtonText.SENDING;
+  submitButtonElement.disabled = true;
+  submitButtonElement.textContent = SubmitButtonText.SENDING;
 };
 
 const unblockSubmitButton = () => {
-  submitButton.disabled = false;
-  submitButton.textContent = SubmitButtonText.IDLE;
+  submitButtonElement.disabled = false;
+  submitButtonElement.textContent = SubmitButtonText.IDLE;
 };
 
 const setUploadFormSubmit = () => {
-  uploadForm.addEventListener('submit', (evt) => {
+  uploadFormElement.addEventListener('submit', (evt) => {
     evt.preventDefault();
 
     const isValid = pristine.validate();
@@ -83,8 +83,8 @@ const setUploadFormSubmit = () => {
 };
 
 const initForm = () => {
-  uploadInput.addEventListener('change', () => {
-    const file = uploadInput.files[0];
+  uploadFileInputElement.addEventListener('change', () => {
+    const file = uploadFileInputElement.files[0];
     if (!file) {
       return;
     }
@@ -93,7 +93,7 @@ const initForm = () => {
     const matches = FILE_TYPES.some((type) => fileName.endsWith(type));
 
     if (!matches) {
-      uploadInput.value = '';
+      uploadFileInputElement.value = '';
       return;
     }
 
@@ -103,9 +103,9 @@ const initForm = () => {
 
     currentObjectUrl = URL.createObjectURL(file);
 
-    previewImage.src = currentObjectUrl;
+    uploadPreviewImageElement.src = currentObjectUrl;
 
-    form.classList.remove('hidden');
+    uploadOverlayElement.classList.remove('hidden');
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onEscapeKeydown);
 
@@ -117,25 +117,25 @@ const initForm = () => {
   setUploadFormSubmit();
 };
 
-function closeForm () {
-  form.classList.add('hidden');
+function closeForm() {
+  uploadOverlayElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
-  uploadInput.value = '';
+  uploadFileInputElement.value = '';
   document.removeEventListener('keydown', onEscapeKeydown);
 
   if (currentObjectUrl) {
     URL.revokeObjectURL(currentObjectUrl);
     currentObjectUrl = null;
   }
-  previewImage.src = DEFAULT_PREVIEW;
+  uploadPreviewImageElement.src = DEFAULT_PREVIEW;
 
-  uploadForm.reset();
+  uploadFormElement.reset();
   pristine.reset();
   resetScale();
   resetEffects();
   updateEffectPreviews(DEFAULT_PREVIEW);
 }
 
-cancelButton.addEventListener('click', closeForm);
+uploadCancelButtonElement.addEventListener('click', closeForm);
 
 export { initForm, closeForm };

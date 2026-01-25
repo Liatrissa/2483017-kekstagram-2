@@ -27,4 +27,4 @@ const debounce = (callback, timeoutDelay) => {
   };
 };
 
-export{ getRandomInteger, getRandomItem, createIdGenerator, isEscapeKey, debounce };
+export { getRandomInteger, getRandomItem, createIdGenerator, isEscapeKey, debounce };
