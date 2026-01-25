@@ -49,6 +49,9 @@ let effectLevelValue = null;
 let effectLevelContainer = null;
 let effectsRadioButtons = null;
 let currentEffect = 'none';
+let effectsPreviews = null;
+let isSliderUpdateBound = false;
+let isEffectsBound = false;
 
 const isSliderReady = () => effectLevelSlider && effectLevelSlider.noUiSlider !== undefined;
 
@@ -116,6 +119,12 @@ const toggleSliderVisibility = (show) => {
   }
 };
 
+const updateEffectPreviews = (url) => {
+  effectsPreviews.forEach((preview) => {
+    preview.style.backgroundImage = `url(${url})`;
+  });
+};
+
 const onEffectChange = (evt) => {
   currentEffect = evt.target.value;
 
@@ -159,22 +168,25 @@ const initEffects = () => {
   effectLevelValue = document.querySelector('.effect-level__value');
   effectLevelContainer = document.querySelector('.img-upload__effect-level');
   effectsRadioButtons = document.querySelectorAll('.effects__radio');
+  effectsPreviews = document.querySelectorAll('.effects__preview');
 
   if (!isSliderReady()) {
     createSlider();
   }
 
-  if (isSliderReady()) {
+  if (isSliderReady() && !isSliderUpdateBound) {
     effectLevelSlider.noUiSlider.on('update', onSliderUpdate);
+    isSliderUpdateBound = true;
   }
 
-  if (effectsRadioButtons) {
+  if (!isEffectsBound) {
     effectsRadioButtons.forEach((radio) => {
       radio.addEventListener('change', onEffectChange);
     });
+    isEffectsBound = true;
   }
 
   toggleSliderVisibility(false);
 };
 
-export { initEffects, resetEffects };
+export { initEffects, resetEffects, updateEffectPreviews };
