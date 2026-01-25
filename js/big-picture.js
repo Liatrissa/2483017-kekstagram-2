@@ -1,13 +1,13 @@
-import { initComments, ClearComments } from './comments.js';
+import { initComments, clearComments } from './comments.js';
 import { isEscapeKey } from './util.js';
 
 const body = document.body;
 
-const bigPicture = document.querySelector('.big-picture');
-const bigPictureImage = bigPicture.querySelector('.big-picture__img img');
-const likesCount = bigPicture.querySelector('.likes-count');
-const description = bigPicture.querySelector('.social__caption');
-const cancelButton = bigPicture.querySelector('.big-picture__cancel');
+const bigPictureElement = document.querySelector('.big-picture');
+const bigPictureImageElement = bigPictureElement.querySelector('.big-picture__img img');
+const likesCountElement = bigPictureElement.querySelector('.likes-count');
+const descriptionElement = bigPictureElement.querySelector('.social__caption');
+const closeButtonElement = bigPictureElement.querySelector('.big-picture__cancel');
 
 const onEscapeKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -17,35 +17,35 @@ const onEscapeKeydown = (evt) => {
 
 const openBigPicture = (photo) => {
   body.classList.add('modal-open');
-  bigPicture.classList.remove ('hidden');
+  bigPictureElement.classList.remove('hidden');
 
-  bigPictureImage.src = photo.url;
-  bigPictureImage.alt = photo.description;
+  bigPictureImageElement.src = photo.url;
+  bigPictureImageElement.alt = photo.description;
 
-  likesCount.textContent = photo.likes;
-  description.textContent = photo.description;
+  likesCountElement.textContent = photo.likes;
+  descriptionElement.textContent = photo.description;
 
-  ClearComments();
+  clearComments();
   initComments(photo.comments);
 
   document.addEventListener('keydown', onEscapeKeydown);
 };
 
-function closeBigPicture () {
+function closeBigPicture() {
   body.classList.remove('modal-open');
-  bigPicture.classList.add ('hidden');
+  bigPictureElement.classList.add('hidden');
 
-  ClearComments();
-  bigPictureImage.src = '';
-  bigPictureImage.alt = '';
+  clearComments();
+  bigPictureImageElement.src = '';
+  bigPictureImageElement.alt = '';
 
-  likesCount.textContent = '';
-  description.textContent = '';
+  likesCountElement.textContent = '';
+  descriptionElement.textContent = '';
 
   document.removeEventListener('keydown', onEscapeKeydown);
 }
 
-cancelButton.addEventListener('click', () => {
+closeButtonElement.addEventListener('click', () => {
   closeBigPicture();
 });
 
