@@ -24,7 +24,7 @@ const uploadPreviewImageElement = document.querySelector('.img-upload__preview i
 
 let currentObjectUrl = null;
 
-const onEscapeKeydown = (evt) => {
+const onDocumentKeydown = (evt) => {
   if (!isEscapeKey(evt)) {
     return;
   }
@@ -107,7 +107,7 @@ const initForm = () => {
 
     uploadOverlayElement.classList.remove('hidden');
     document.body.classList.add('modal-open');
-    document.addEventListener('keydown', onEscapeKeydown);
+    document.addEventListener('keydown', onDocumentKeydown);
 
     initScale();
     initEffects();
@@ -121,7 +121,7 @@ function closeForm() {
   uploadOverlayElement.classList.add('hidden');
   document.body.classList.remove('modal-open');
   uploadFileInputElement.value = '';
-  document.removeEventListener('keydown', onEscapeKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
 
   if (currentObjectUrl) {
     URL.revokeObjectURL(currentObjectUrl);
@@ -136,6 +136,10 @@ function closeForm() {
   updateEffectPreviews(DEFAULT_PREVIEW);
 }
 
-uploadCancelButtonElement.addEventListener('click', closeForm);
+const onUploadCancelButtonClick = () => {
+  closeForm();
+};
 
-export { initForm, closeForm };
+uploadCancelButtonElement.addEventListener('click', onUploadCancelButtonClick);
+
+export { initForm };

@@ -32,11 +32,11 @@ const showMessage = (templateId, innerSelector, buttonSelector) => {
 
   const close = () => {
     messageElement.remove();
-    document.removeEventListener('keydown', onKeydown, true);
-    document.removeEventListener('click', onOutsideClick, true);
+    document.removeEventListener('keydown', onDocumentKeydown, true);
+    document.removeEventListener('click', onDocumentClick, true);
   };
 
-  function onKeydown(evt) {
+  function onDocumentKeydown(evt) {
     if (isEscapeKey(evt)) {
       evt.preventDefault();
       evt.stopImmediatePropagation();
@@ -44,17 +44,21 @@ const showMessage = (templateId, innerSelector, buttonSelector) => {
     }
   }
 
-  function onOutsideClick(evt) {
+  function onDocumentClick(evt) {
     if (innerElement.contains(evt.target)) {
       return;
     }
     close();
   }
 
-  buttonElement.addEventListener('click', close);
+  const onMessageCloseButtonClick = () => {
+    close();
+  };
 
-  document.addEventListener('keydown', onKeydown, true);
-  document.addEventListener('click', onOutsideClick, true);
+  buttonElement.addEventListener('click', onMessageCloseButtonClick);
+
+  document.addEventListener('keydown', onDocumentKeydown, true);
+  document.addEventListener('click', onDocumentClick, true);
 };
 
 const showSuccessMessage = () => {

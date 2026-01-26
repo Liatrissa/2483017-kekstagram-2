@@ -9,7 +9,7 @@ const likesCountElement = bigPictureElement.querySelector('.likes-count');
 const descriptionElement = bigPictureElement.querySelector('.social__caption');
 const closeButtonElement = bigPictureElement.querySelector('.big-picture__cancel');
 
-const onEscapeKeydown = (evt) => {
+const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     closeBigPicture();
   }
@@ -28,7 +28,7 @@ const openBigPicture = (photo) => {
   clearComments();
   initComments(photo.comments);
 
-  document.addEventListener('keydown', onEscapeKeydown);
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
 function closeBigPicture() {
@@ -42,7 +42,7 @@ function closeBigPicture() {
   likesCountElement.textContent = '';
   descriptionElement.textContent = '';
 
-  document.removeEventListener('keydown', onEscapeKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
 }
 
 closeButtonElement.addEventListener('click', () => {

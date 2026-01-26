@@ -16,13 +16,13 @@ const updateScale = (value) => {
   imagePreviewElement.style.transform = `scale(${value / MAX_SCALE})`;
 };
 
-const onSmallerButtonClick = () => {
+const onScaleSmallerButtonClick = () => {
   if (currentScale > MIN_SCALE) {
     updateScale(currentScale - SCALE_STEP);
   }
 };
 
-const onBiggerButtonClick = () => {
+const onScaleBiggerButtonClick = () => {
   if (currentScale < MAX_SCALE) {
     updateScale(currentScale + SCALE_STEP);
   }
@@ -39,8 +39,8 @@ const initScale = () => {
   imagePreviewElement = document.querySelector('.img-upload__preview img');
 
   if (!isScaleInited) {
-    scaleControlSmallerElement.addEventListener('click', onSmallerButtonClick);
-    scaleControlBiggerElement.addEventListener('click', onBiggerButtonClick);
+    scaleControlSmallerElement.addEventListener('click', onScaleSmallerButtonClick);
+    scaleControlBiggerElement.addEventListener('click', onScaleBiggerButtonClick);
     isScaleInited = true;
   }
 

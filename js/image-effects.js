@@ -132,7 +132,7 @@ const updateEffectPreviews = (url) => {
   });
 };
 
-const onEffectChange = (evt) => {
+const onEffectsRadioButtonChange = (evt) => {
   currentEffect = evt.target.value;
 
   if (currentEffect === DEFAULT_EFFECT) {
@@ -148,7 +148,7 @@ const onEffectChange = (evt) => {
   applyEffect(currentEffect, config.max);
 };
 
-const onSliderUpdate = () => {
+const onEffectLevelSliderUpdate = () => {
   if (isSliderReady()) {
     const value = effectLevelSliderElement.noUiSlider.get();
     applyEffect(currentEffect, value);
@@ -182,13 +182,13 @@ const initEffects = () => {
   }
 
   if (isSliderReady() && !isSliderUpdateBound) {
-    effectLevelSliderElement.noUiSlider.on('update', onSliderUpdate);
+    effectLevelSliderElement.noUiSlider.on('update', onEffectLevelSliderUpdate);
     isSliderUpdateBound = true;
   }
 
   if (!isEffectsBound) {
     effectsRadioButtonElements.forEach((radio) => {
-      radio.addEventListener('change', onEffectChange);
+      radio.addEventListener('change', onEffectsRadioButtonChange);
     });
     isEffectsBound = true;
   }
